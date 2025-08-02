@@ -6,7 +6,7 @@ volumes:
     driver: local
 services:
   lldap:
-    image: lldap/lldap:v0.6.1-alpine@sha256:f0d937923b0feb969304eba25434338be238c3489f74206fc8d750aee66bf4ca
+    image: lldap/lldap:v0.6.1-alpine@sha256:4931eeeb841b1bbf5774161b5fd9dab88f41ffeb4b08ca656f0b7595cd7cb52a
     labels:
       - traefik.http.routers.lldap.rule=Host(`ldap.spaceduck.cloud`)
       - traefik.http.services.lldap.loadbalancer.server.port=17170
