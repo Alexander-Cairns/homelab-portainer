@@ -1,7 +1,7 @@
 services:
   pihole:
     container_name: pihole
-    image: pihole/pihole:latest
+    image: pihole/pihole:2024.07.0@sha256:0def896a596e8d45780b6359dbf82fc8c75ef05b97e095452e67a0a4ccc95377
     labels:
       - traefik.http.routers.pihole.rule=Host(`pihole.spaceduck.cloud`)
       - traefik.http.services.pihole.loadbalancer.server.port=80
@@ -21,7 +21,7 @@ services:
       - pihole
       - traefik
   orbital-sync:
-    image: mattwebbio/orbital-sync:1
+    image: mattwebbio/orbital-sync:1.8.4@sha256:39ade356bf46018b262da9aab9775f3b5fc6f850a4ac6002b699d9fd0b35c240
     environment:
       PRIMARY_HOST_BASE_URL: http://pihole
       PRIMARY_HOST_PASSWORD: $SINNOH_PIHOLE_PASSWORD

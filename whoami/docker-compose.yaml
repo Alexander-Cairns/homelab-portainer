@@ -1,6 +1,6 @@
 services:
   whoami:
-    image: traefik/whoami
+    image: traefik/whoami:v1.10.4@sha256:02d8fe035f170f91cbb5e458a57f4cefab747436f8244a0eb2d66785fe5e565f
     labels:
       - traefik.http.routers.whoami.rule=Host(`whoami.spaceduck.cloud`)
       - traefik.http.services.whoami.loadbalancer.server.port=80

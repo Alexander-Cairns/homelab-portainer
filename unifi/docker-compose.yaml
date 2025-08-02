@@ -1,7 +1,7 @@
 version: '3'
 services:
   unifi-network-application:
-    image: lscr.io/linuxserver/unifi-network-application:latest
+    image: lscr.io/linuxserver/unifi-network-application:9.0.108-ls76@sha256:edbccdd0c5f31d742412df98e7f56caff59ea726a6b231f79ad0a9b8ba22c11f
     container_name: unifi-network-application
     labels:
       - traefik.http.routers.unifi.rule=Host(`unifi.spaceduck.cloud`)
@@ -43,7 +43,7 @@ services:
       - unifi
       - traefik
   unifi-db:
-    image: docker.io/mongo:7.0
+    image: docker.io/mongo:7.0.16@sha256:c630c59342c1493d50345136df2af14a76b9e827dd5316bfabee07a0880a5f3a
     container_name: unifi-db
     networks:
       - unifi
