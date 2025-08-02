@@ -1,0 +1,18 @@
+services:
+  whoami:
+    image: traefik/whoami
+    labels:
+      - traefik.http.routers.whoami.rule=Host(`whoami.spaceduck.cloud`)
+      - traefik.http.services.whoami.loadbalancer.server.port=80
+      - traefik.http.routers.whoami.tls=true
+      - traefik.http.routers.whoami.tls.certresolver=letsencryptprod
+    restart: unless-stopped
+    networks:
+      - whoami
+      - traefik
+networks:
+  traefik:
+    name: traefik_default
+    external: true
+  whoami:
+

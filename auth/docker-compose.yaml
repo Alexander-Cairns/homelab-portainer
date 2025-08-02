@@ -1,0 +1,151 @@
+version: "3"
+volumes:
+  lldap_data:
+    driver: local
+  authelia_data:
+    driver: local
+services:
+  lldap:
+    image: lldap/lldap:stable
+    labels:
+      - traefik.http.routers.lldap.rule=Host(`ldap.spaceduck.cloud`)
+      - traefik.http.services.lldap.loadbalancer.server.port=17170
+      - traefik.http.routers.lldap.tls=true
+      - traefik.http.routers.lldap.tls.certresolver=letsencryptprod
+    ports:
+      # For LDAP, not recommended to expose, see Usage section.
+      #- "3890:3890"
+      # For LDAPS (LDAP Over SSL), enable port if LLDAP_LDAPS_OPTIONS__ENABLED set true, look env below
+      - "636:6360"
+      # For the web front-end
+      # - "17170:17170"
+    volumes:
+      - "lldap_data:/data"
+      # Alternatively, you can mount a local folder
+      # - "./lldap_data:/data"
+    environment:
+      - UID=568
+      - GID=568
+      - TZ=America/Halifax
+      - LLDAP_JWT_SECRET=$LLDAP_JWT_SECRET
+      - LLDAP_KEY_SEED=$LLDAP_KEY_SEED
+      - LLDAP_LDAP_BASE_DN=dc=spaceduck,dc=cloud
+      - LLDAP_LDAP_USER_PASS=$LLDAP_LDAP_USER_PASS
+      # If using LDAPS, set enabled true and configure cert and key path
+      # - LLDAP_LDAPS_OPTIONS__ENABLED=true
+      # - LLDAP_LDAPS_OPTIONS__CERT_FILE=/path/to/certfile.crt
+      # - LLDAP_LDAPS_OPTIONS__KEY_FILE=/path/to/keyfile.key
+      # You can also set a different database:
+      # - LLDAP_DATABASE_URL=mysql://mysql-user:password@mysql-server/my-database
+      # - LLDAP_DATABASE_URL=postgres://postgres-user:password@postgres-server/my-database
+      # If using SMTP, set the following variables
+      - LLDAP_SMTP_OPTIONS__ENABLE_PASSWORD_RESET=true
+      - LLDAP_SMTP_OPTIONS__SERVER=$SMTP_HOST
+      - LLDAP_SMTP_OPTIONS__PORT=$SMTP_PORT
+      - LLDAP_SMTP_OPTIONS__SMTP_ENCRYPTION=$LLDAP_SMTP_OPTIONS__SMTP_ENCRYPTION
+      - LLDAP_SMTP_OPTIONS__USER=$SMTP_USER
+      - LLDAP_SMTP_OPTIONS__PASSWORD=$SMTP_PASSWORD
+      - LLDAP_SMTP_OPTIONS__FROM=$LLDAP_SMTP_OPTIONS__FROM
+      - LLDAP_SMTP_OPTIONS__TO=$LLDAP_SMTP_OPTIONS__TO
+    networks:
+      - auth
+      - traefik
+  authelia:
+    image: 'docker.io/authelia/authelia:latest'
+    depends_on:
+      - lldap
+    labels:
+      - traefik.http.routers.authelia.rule=Host(`auth.spaceduck.cloud`)
+      - traefik.http.services.authelia.loadbalancer.server.port=9091
+      - traefik.http.routers.authelia.tls=true
+      - traefik.http.routers.authelia.tls.certresolver=letsencryptprod
+    restart: 'unless-stopped'
+    ports:
+      - "9091:9091"
+    networks:
+      - auth
+      - traefik
+    environment:
+      AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET: "$AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET"
+      AUTHELIA_SESSION_SECRET: "$AUTHELIA_SESSION_SECRET"
+      AUTHELIA_STORAGE_ENCRYPTION_KEY: "$AUTHELIA_STORAGE_ENCRYPTION_KEY"
+      BIND_PASSWORD: "$AUTHELIA_BIND_PASSWORD"
+      SMTP_HOST: "$SMTP_HOST"
+      SMTP_PORT: "$SMTP_PORT"
+      SMTP_PASSWORD: "$SMTP_PASSWORD"
+      SMTP_USER: "$SMTP_USER"
+      X_AUTHELIA_CONFIG_FILTERS: template
+    volumes:
+      - authelia_data:/data
+    configs:
+      - source: authelia
+        target: /config/configuration.yml
+networks:
+  traefik:
+    name: traefik_default
+    external: true
+  auth:
+configs:
+  authelia:
+    content: |
+      ###############################################################
+      #                   Authelia configuration                    #
+      ###############################################################
+
+      # This is just the LDAP part of the Authelia configuration!
+      # See Authelia docs at https://www.authelia.com/configuration/first-factor/ldap/ for more info
+
+      authentication_backend:
+        # Password reset through authelia works normally.
+        password_reset:
+          disable: false
+        # How often authelia should check if there is a user update in LDAP
+        refresh_interval: 1m
+        ldap:
+          implementation: lldap
+          address: ldap://lldap:3890
+          base_dn: dc=spaceduck,dc=cloud
+          user: uid=authelia_bind,ou=people,dc=spaceduck,dc=cloud
+          password: '{{ env "BIND_PASSWORD" }}'
+
+      log:
+        level: debug
+      storage:
+        encryption_key: 'a_very_important_secret'
+        local:
+          path: '/data/db.sqlite3'
+
+      notifier:
+        disable_startup_check: false
+        smtp:
+          address: 'submissions://{{ env "SMTP_HOST" }}:{{ env "SMTP_PORT" }}'
+          timeout: '5s'
+          username: '{{ env "SMTP_USER" }}'
+          password: '{{ env "SMTP_PASSWORD" }}'
+          sender: "spaceduck.cloud auth <no-reply+auth@spaceduck.cloud>"
+          subject: "[Authelia] {title}"
+          startup_check_address: 'admin@spaceduck.cloud'
+
+      session:
+        cookies:
+          - domain: 'spaceduck.cloud'
+            authelia_url: 'https://auth.spaceduck.cloud'
+            default_redirection_url: 'https://spaceduck.cloud'
+            name: 'authelia_session'
+            same_site: 'lax'
+            inactivity: '5m'
+            expiration: '1h'
+            remember_me: '1d'
+
+      access_control:
+        default_policy: 'deny'
+        rules:
+          # Rules applied to everyone
+          - domain: 'public.spaceduck.cloud'
+            policy: 'bypass'
+          - domain: 'traefik.spaceduck.cloud'
+            policy: 'one_factor'
+          - domain: 'secure.spaceduck.cloud'
+            policy: 'two_factor'
+
+

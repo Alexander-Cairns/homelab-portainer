@@ -1,0 +1,52 @@
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    labels:
+      - traefik.http.routers.pihole.rule=Host(`pihole.spaceduck.cloud`)
+      - traefik.http.services.pihole.loadbalancer.server.port=80
+      - traefik.http.routers.pihole.tls=true
+      - traefik.http.routers.pihole.tls.certresolver=letsencryptprod
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+    environment:
+      TZ: 'America/Halifax'
+      # WEBPASSWORD: 'set a secure password here or it will be random'
+    volumes:
+      - pihole:/etc/pihole
+      - dnsmasq:/etc/dnsmasq.d
+    restart: unless-stopped
+    networks:
+      - pihole
+      - traefik
+  orbital-sync:
+    image: mattwebbio/orbital-sync:1
+    environment:
+      PRIMARY_HOST_BASE_URL: http://pihole
+      PRIMARY_HOST_PASSWORD: $SINNOH_PIHOLE_PASSWORD
+      SECONDARY_HOSTS_1_BASE_URL: http://192.168.3.4:20720
+      SECONDARY_HOSTS_1_PASSWORD: $JOHTO_PIHOLE_PASSWORD
+      INTERVAL_MINUTES: 5
+      VERBOSE: 'false'
+      SYNC_V5_WHITELIST: false
+      SYNC_V5_REGEX_WHITELIST: false
+      SYNC_V5_BLACKLIST: false
+      SYNC_V5_REGEX_LIST: false
+      SYNC_V5_AD_LIST: false
+      SYNC_V5_CLIENT: false
+      SYNC_V5_GROUP: false
+      SYNC_V5_AUDIT_LOG: false
+      SYNC_V5_STATIC_DHCP_LEASES: false
+      SYNC_V5_FLUSH_TABLES: false
+    networks:
+      - pihole
+networks:
+  traefik:
+    name: traefik_default
+    external: true
+  pihole:
+volumes:
+  pihole:
+  dnsmasq:
+

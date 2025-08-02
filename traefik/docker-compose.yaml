@@ -1,21 +1,53 @@
 version: '3'
-
 services:
   reverse-proxy:
     # The official v3 Traefik docker image
     image: traefik:v3.2
     # Enables the web UI and tells Traefik to listen to docker
-    command: --api.insecure=true --providers.docker --entryPoints.websecure.address=:443
+    command: >
+      --api.insecure=true
+      --providers.docker
+      --providers.docker.network=traefik_default
+      --entryPoints.websecure.address=:443
+      --providers.file.filename=/traefik_config.yaml
+      --log.level=DEBUG
+      --certificatesresolvers.letsencryptprod.acme.email=acme@spaceduck.cloud
+      --certificatesresolvers.letsencryptprod.acme.storage=/letsencrypt/acme.json
+      --certificatesresolvers.letsencryptprod.acme.dnschallenge.provider=route53
+      --certificatesresolvers.letsencryptprod.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53
+    environment:
+      - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+      - AWS_REGION=us-east-1
     ports:
       - "80:80"
       - "443:443"
       # The Web UI (enabled by --api.insecure=true)
-      - "8080:8080"
+      - "8081:8080"
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
+      - traefik_letsencrypt:/letsencrypt
+    configs:
+      - traefik_config.yaml
+    restart: unless-stopped
 networks:
   traefik:
   bridge:
     name: bridge
     external: true
+configs:
+  traefik_config.yaml:
+    content: |
+      http:
+        middlewares:
+          unifiHeaders:
+            headers:
+              customRequestHeaders:
+                Authorization: ""
+        serversTransports:
+          skipTLS:
+            insecureSkipVerify: true
+volumes:
+  traefik_letsencrypt:
+
