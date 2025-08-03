@@ -43,7 +43,7 @@ services:
       - unifi
       - traefik
   unifi-db:
-    image: docker.io/mongo:7.0.16@sha256:c630c59342c1493d50345136df2af14a76b9e827dd5316bfabee07a0880a5f3a
+    image: docker.io/mongo:7.0.22@sha256:54c57094b11170abc3d9a827be75226da9606ab23485b96563e6cc31ee962781
     container_name: unifi-db
     networks:
       - unifi
