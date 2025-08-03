@@ -21,6 +21,25 @@ services:
         target: /etc/grafana/grafana.ini
       - source: grafana_ldap
         target: /etc/grafana/ldap.toml
+      - source: grafana_loki
+        target: /etc/grafana/provisioning/datasources/ds.yaml
+
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - grafana
+
+  promtail:
+    image: grafana/promtail:latest
+    volumes:
+      - /var/log:/var/log
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - grafana
+
 networks:
   traefik:
     name: traefik_default
@@ -62,4 +81,16 @@ configs:
       name = "displayName"
       surname = "sn"
       username = "uid"
-
+  grafana_loki:
+    content: |
+        apiVersion: 1
+        datasources:
+        - name: Loki
+          type: loki
+          access: proxy 
+          orgId: 1
+          url: http://loki:3100
+          basicAuth: false
+          isDefault: true
+          version: 1
+          editable: false
