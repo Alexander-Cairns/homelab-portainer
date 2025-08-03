@@ -9,7 +9,7 @@ services:
       - traefik.http.routers.grafana.tls=true
       - traefik.http.routers.grafana.tls.certresolver=letsencryptprod
     volumes:
-      - grafana_data:/data
+      - grafana_data:/var/lib/grafana
     networks:
       - grafana
       - traefik
