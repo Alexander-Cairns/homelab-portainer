@@ -58,4 +58,8 @@ configs:
 
       [servers.attributes]
       member_of = "memberOf"
-      email =  "email"
+      email = "mail"
+      name = "displayName"
+      surname = "sn"
+      username = "uid"
+
