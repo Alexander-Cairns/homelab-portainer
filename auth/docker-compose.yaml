@@ -27,6 +27,7 @@ services:
       - UID=568
       - GID=568
       - TZ=America/Halifax
+      - VERBOSE=true
       - LLDAP_JWT_SECRET=$LLDAP_JWT_SECRET
       - LLDAP_KEY_SEED=$LLDAP_KEY_SEED
       - LLDAP_LDAP_BASE_DN=dc=spaceduck,dc=cloud
