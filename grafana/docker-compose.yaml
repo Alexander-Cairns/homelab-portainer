@@ -50,7 +50,7 @@ configs:
       bind_password = '$__env{LDAP_BIND_PASSWORD}'
 
 
-      search_filter = "(uip=%s)"
+      search_filter = "(uid=%s)"
       search_base_dns = ["dc=spaceduck,dc=cloud"]
       # group_search_filter = "(&(objectClass=posixGroup)(memberUid=%s))"
       # group_search_filter_user_attribute = "distinguishedName"
