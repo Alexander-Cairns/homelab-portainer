@@ -10,12 +10,20 @@ services:
       - traefik.http.routers.grafana.tls.certresolver=letsencryptprod
     volumes:
       - "grafana_data:/data"
+      - ./config/grafana.ini:/etc/grafana/grafana.ini
+      - ./config/ldap.toml:/etc/grafana/ldap.toml
     networks:
       - grafana
       - traefik
+      - auth
+    environment:
+      LDAP_BIND_PASSWORD: ${LDAP_BIND_PASSWORD}
 networks:
   traefik:
     name: traefik_default
+    external: true
+  auth:
+    name: auth_auth
     external: true
   grafana:
 volumes:
