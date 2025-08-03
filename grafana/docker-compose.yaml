@@ -25,7 +25,7 @@ services:
         target: /etc/grafana/provisioning/datasources/ds.yaml
 
   loki:
-    image: grafana/loki:latest
+    image: grafana/loki:3.5.3@sha256:3165cecce301ce5b9b6e3530284b080934a05cd5cafac3d3d82edcb887b45ecd
     ports:
       - "3100:3100"
     command: -config.file=/etc/loki/local-config.yaml
@@ -33,7 +33,7 @@ services:
       - grafana
 
   promtail:
-    image: grafana/promtail:latest
+    image: grafana/promtail:3.5.3@sha256:698c3357886c886bb9a862da36062e130c20bf359d956148e67ee36141ef6f17
     volumes:
       - /var/log:/var/log
     command: -config.file=/etc/promtail/config.yml
