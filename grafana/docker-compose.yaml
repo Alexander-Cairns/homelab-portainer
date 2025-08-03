@@ -1,0 +1,23 @@
+services:
+  grafana:
+    image: grafana/grafana:12.1.0@sha256:6ac590e7cabc2fbe8d7b8fc1ce9c9f0582177b334e0df9c927ebd9670469440f
+    container_name: grafana
+    restart: unless-stopped
+    labels:
+      - traefik.http.routers.grafana.rule=Host(`grafana.spaceduck.cloud`)
+      - traefik.http.services.grafana.loadbalancer.server.port=3000
+      - traefik.http.routers.grafana.tls=true
+      - traefik.http.routers.grafana.tls.certresolver=letsencryptprod
+    volumes:
+      - "grafana_data:/data"
+    networks:
+      - grafana
+      - traefik
+networks:
+  traefik:
+    name: traefik_default
+    external: true
+  grafana:
+volumes:
+  grafana_data:
+    driver: local
