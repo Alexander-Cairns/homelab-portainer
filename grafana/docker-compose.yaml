@@ -81,6 +81,11 @@ configs:
       name = "displayName"
       surname = "sn"
       username = "uid"
+
+      [[servers.group_mappings]]
+      group_dn = "cn=supaeradmins,ou=groups,dc=spaceduck,dc=cloud"
+      org_role = "Admin"
+      grafana_admin = true
   grafana_loki:
     content: |
         apiVersion: 1
