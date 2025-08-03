@@ -42,12 +42,12 @@ configs:
   grafana_ldap:
     content: |
       [[servers]]
-      host = "ldap"
+      host = "lldap"
       port = 3890
       timeout = 10
 
       bind_dn = "uid=grafana_bind,ou=people,dc=spaceduck,dc=cloud"
-      bind_password = '${LDAP_BIND_PASSWORD}'
+      bind_password = '$$__env{LDAP_BIND_PASSWORD}'
 
 
       search_filter = "(uid=%s)"
