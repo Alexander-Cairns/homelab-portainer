@@ -51,7 +51,7 @@ services:
       - auth
       - traefik
   authelia:
-    image: docker.io/library/alpine:3.21.3@sha256:a8560b36e8b8210634f77d9f7f9efd7ffa463e380b75e2e74aff4511df3ef88c
+    image: authelia/authelia:4.39.5@sha256:659255f1cef59911ab99193156ecb7ce748a3380ac133812a1f651a2d47e594e
     depends_on:
       - lldap
     labels:
