@@ -83,7 +83,7 @@ configs:
       username = "uid"
 
       [[servers.group_mappings]]
-      group_dn = "cn=supaeradmins,ou=groups,dc=spaceduck,dc=cloud"
+      group_dn = "cn=superadmins,ou=groups,dc=spaceduck,dc=cloud"
       org_role = "Admin"
       grafana_admin = true
   grafana_loki:
