@@ -124,6 +124,14 @@ configs:
           isDefault: true
           version: 1
           editable: false
+        - name: Prometheus
+          type: prometheus
+          orgId: 1
+          url: http://prometheus:9090
+          basicAuth: false
+          isDefault: true
+          version: 1
+          editable: false
   alloy_config:
     content: |
       // ###############################
