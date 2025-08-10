@@ -40,6 +40,31 @@ services:
     networks:
       - grafana
 
+  alloy:
+    image: grafana/alloy:v1.10.1@sha256:582f5a5169cd67a2bdbf98777c1a6f596203f573cdef5c021749fd3279605768
+    privileged: true
+    ports:
+     - 12345:12345
+     # - 4317:4317
+     # - 4318:4318
+    environment:
+      ALLOY_DEPLOY_MODE: docker
+    volumes:
+      - /proc:/rootproc:ro
+      - /var/run/docker.sock.raw:/var/run/docker.sock
+      - /sys:/sys:ro
+      - /:/rootfs:ro
+      - /dev/disk/:/dev/disk:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    command: run --server.http.listen-addr=0.0.0.0:12345 --storage.path=/var/lib/alloy/data /etc/alloy/config.alloy
+    extra_hosts:
+        - "host.docker.internal:host-gateway"
+    devices:
+        - /dev/kmsg
+    configs:
+      - source: alloy_config
+        target: /etc/alloy/config.alloy
+
 networks:
   traefik:
     name: traefik_default
@@ -99,3 +124,84 @@ configs:
           isDefault: true
           version: 1
           editable: false
+  alloy_config:
+    content: |
+      // ###############################
+      // #### Metrics Configuration ####
+      // ###############################
+
+      // Host Cadvisor on the Docker socket to expose container metrics.
+      prometheus.exporter.cadvisor "example" {
+        docker_only = true
+      }
+
+      discovery.relabel "example" {
+          targets = prometheus.exporter.cadvisor.example.targets
+
+          rule {
+              target_label = "job"
+              replacement  = "integrations/docker"
+          }
+
+          rule {
+              target_label = "instance"
+              replacement  = constants.hostname
+          }
+      }
+
+      // Configure a prometheus.scrape component to collect cadvisor metrics.
+      prometheus.scrape "scraper" {
+        targets    = discovery.relabel.example.output
+        forward_to = [ prometheus.remote_write.demo.receiver ]
+
+
+        scrape_interval = "10s"
+      }
+
+      // Configure a prometheus.remote_write component to send metrics to a Prometheus server.
+      prometheus.remote_write "demo" {
+        endpoint {
+          url = "http://prometheus:9090/api/v1/write"
+        }
+      }
+
+      // ###############################
+      // #### Logging Configuration ####
+      // ###############################
+
+      // Discover Docker containers and extract metadata.
+      discovery.docker "linux" {
+        host = "unix:///var/run/docker.sock"
+      }
+
+      // Define a relabeling rule to create a service name from the container name.
+      discovery.relabel "logs_integrations_docker" {
+            targets = []
+        
+            rule {
+                source_labels = ["__meta_docker_container_name"]
+                regex = "/(.*)"
+                target_label = "container_name"
+            }
+
+           rule {
+              target_label = "instance"
+              replacement  = constants.hostname
+          }
+
+        }
+
+
+      // Configure a loki.source.docker component to collect logs from Docker containers.
+      loki.source.docker "default" {
+        host       = "unix:///var/run/docker.sock"
+        targets    = discovery.docker.linux.targets
+        relabel_rules = discovery.relabel.logs_integrations_docker.rules
+        forward_to = [loki.write.local.receiver]
+      }
+
+      loki.write "local" {
+        endpoint {
+          url = "http://loki:3100/loki/api/v1/push"
+        }
+      }
