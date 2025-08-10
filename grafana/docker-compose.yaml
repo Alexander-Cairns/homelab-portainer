@@ -51,7 +51,7 @@ services:
       ALLOY_DEPLOY_MODE: docker
     volumes:
       - /proc:/rootproc:ro
-      - /var/run/docker.sock.raw:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock
       - /sys:/sys:ro
       - /:/rootfs:ro
       - /dev/disk/:/dev/disk:ro
