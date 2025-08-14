@@ -14,8 +14,26 @@ services:
     networks:
       - home
       - traefik
+    environment:
+      - TZ=America/Halifax
+
+  zigbee2mqtt:
+    labels:
+      - traefik.http.routers.zigbee2mqtt.rule=Host(`zigbee2mqtt.spaceduck.cloud`)
+      - traefik.http.services.zigbee2mqtt.loadbalancer.server.port=8123
+      - traefik.http.routers.zigbee2mqtt.tls=true
+      - traefik.http.routers.zigbee2mqtt.tls.certresolver=letsencryptprod
+    container_name: zigbee2mqtt
+    image: ghcr.io/koenkk/zigbee2mqtt
+    restart: unless-stopped
+    volumes:
+      - zigbee2mqtt_data:/app/data
+    environment:
+      - TZ=America/Halifax
+
 volumes:
   homeassistant_data:
+  zigbee2mqtt_data:
 networks:
   traefik:
     name: traefik_default
