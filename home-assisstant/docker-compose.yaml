@@ -30,6 +30,10 @@ services:
       - TZ=America/Halifax
       - ZIGBEE2MQTT_CONFIG_FRONTEND_ENABLED=true
       - ZIGBEE2MQTT_CONFIG_FRONTEND_URL=https://zigbee2mqtt.spaceduck.cloud
+      - ZIGBEE2MQTT_CONFIG_SERIAL_PORT=tcp://192.168.1.90:6638
+      - ZIGBEE2MQTT_CONFIG_SERIAL_BAUDRATE=115200
+      - ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER=ezsp
+      - ZIGBEE2MQTT_CONFIG_ADVANCED_TRANSMIT_POWER=20
     networks:
       - home
       - traefik
