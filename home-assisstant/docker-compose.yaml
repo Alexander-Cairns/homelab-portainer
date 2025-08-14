@@ -47,7 +47,7 @@ services:
       - home
     configs:
       - source: mosquitto_config
-        target: /mosquitto/config
+        target: /mosquitto/config/mosquitto.conf
 
 volumes:
   homeassistant_data:
