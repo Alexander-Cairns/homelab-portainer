@@ -1,0 +1,21 @@
+services:
+  homeassistant:
+    labels:
+      - traefik.http.routers.homeassistant.rule=Host(`home.spaceduck.cloud`)
+      - traefik.http.services.homeassistant.loadbalancer.server.port=8123
+      - traefik.http.routers.homeassistant.tls=true
+      - traefik.http.routers.homeassistant.tls.certresolver=letsencryptprod
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    volumes:
+      - homeassistant_data:/config
+    networks:
+      - home
+      - traefik
+volumes:
+  homeassistant_data:
+networks:
+  traefik:
+    name: traefik_default
+    external: true
+  home:
