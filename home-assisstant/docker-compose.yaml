@@ -42,10 +42,12 @@ services:
     image: eclipse-mosquitto
     container_name: mosquitto
     volumes:
-      - mosquitto_config:/mosquitto/config
       - mosquitto_data:/mosquitto/data
     networks:
       - home
+    configs:
+      - source: mosquitto_config
+        target: /mosquitto/config
 
 volumes:
   homeassistant_data:
@@ -57,3 +59,12 @@ networks:
     name: traefik_default
     external: true
   home:
+
+configs:
+  mosquitto_config:
+    content: |
+      persistence true
+      persistence_location /mosquitto/data/
+      log_dest file /mosquitto/log/mosquitto.log
+      listener 1883
+      allow_anonymous true
