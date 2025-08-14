@@ -14,23 +14,8 @@ services:
     networks:
       - home
       - traefik
-  filebrowser:
-    labels:
-      - traefik.http.routers.filebrowser.rule=Host(`home-files.spaceduck.cloud`)
-      - traefik.http.services.filebrowser.loadbalancer.server.port=80
-      - traefik.http.routers.filebrowser.tls=true
-      - traefik.http.routers.filebrowser.tls.certresolver=letsencryptprod
-    image: filebrowser/filebrowser
-    volumes:
-      - homeassistant_data:/srv
-      - filebrowser_database:/database
-      - filebrowser_config:/config
-    networks:
-      - traefik
 volumes:
   homeassistant_data:
-  filebrowser_database:
-  filebrowser_config:
 networks:
   traefik:
     name: traefik_default
