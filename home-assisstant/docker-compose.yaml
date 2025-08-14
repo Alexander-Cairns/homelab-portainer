@@ -9,8 +9,6 @@ services:
     image: "ghcr.io/home-assistant/home-assistant:stable"
     volumes:
       - homeassistant_data:/config
-    ports:
-      - 8123:8123
     networks:
       - home
       - traefik
@@ -20,7 +18,7 @@ services:
   zigbee2mqtt:
     labels:
       - traefik.http.routers.zigbee2mqtt.rule=Host(`zigbee2mqtt.spaceduck.cloud`)
-      - traefik.http.services.zigbee2mqtt.loadbalancer.server.port=8123
+      - traefik.http.services.zigbee2mqtt.loadbalancer.server.port=8080
       - traefik.http.routers.zigbee2mqtt.tls=true
       - traefik.http.routers.zigbee2mqtt.tls.certresolver=letsencryptprod
     container_name: zigbee2mqtt
