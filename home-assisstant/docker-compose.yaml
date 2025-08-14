@@ -28,6 +28,8 @@ services:
       - zigbee2mqtt_data:/app/data
     environment:
       - TZ=America/Halifax
+      - ZIGBEE2MQTT_CONFIG_FRONTEND_ENABLED=true
+      - ZIGBEE2MQTT_CONFIG_FRONTEND_URL=https://zigbee2mqtt.spaceduck.cloud
     networks:
       - home
       - traefik
