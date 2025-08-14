@@ -34,13 +34,24 @@ services:
       - ZIGBEE2MQTT_CONFIG_SERIAL_BAUDRATE=115200
       - ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER=ezsp
       - ZIGBEE2MQTT_CONFIG_ADVANCED_TRANSMIT_POWER=20
+      - ZIGBEE2MQTT_CONFIG_MQTT_SERVER=mosquitto:1883
     networks:
       - home
       - traefik
+  mosquitto:
+    image: eclipse-mosquitto
+    container_name: mosquitto
+    volumes:
+      - mosquitto_config:/mosquitto/config
+      - mosquitto_data:/mosquitto/data
+    networks:
+      - home
 
 volumes:
   homeassistant_data:
   zigbee2mqtt_data:
+  mosquitto_data:
+  mosquitto_config:
 networks:
   traefik:
     name: traefik_default
