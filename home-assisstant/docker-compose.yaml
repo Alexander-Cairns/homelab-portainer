@@ -28,6 +28,9 @@ services:
       - zigbee2mqtt_data:/app/data
     environment:
       - TZ=America/Halifax
+    networks:
+      - home
+      - traefik
 
 volumes:
   homeassistant_data:
