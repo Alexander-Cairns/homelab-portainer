@@ -1,7 +1,7 @@
 services:
   pihole:
     container_name: pihole
-    image: pihole/pihole:2024.07.0@sha256:0def896a596e8d45780b6359dbf82fc8c75ef05b97e095452e67a0a4ccc95377
+    image: pihole/pihole:2025.08.0@sha256:90a1412b3d3037d1c22131402bde19180d898255b584d685c84d943cf9c14821
     labels:
       - traefik.http.routers.pihole.rule=Host(`pihole.spaceduck.cloud`)
       - traefik.http.services.pihole.loadbalancer.server.port=80
