@@ -47,7 +47,7 @@ services:
     container_name: nebula-sync
     environment:
       PRIMARY: http://pihole|$SINNOH_PIHOLE_PASSWORD
-      REPLICAS: http://192.3.4:20720|$JOHTO_PIHOLE_PASSWORD
+      REPLICAS: http://192.168.3.4:20720|$JOHTO_PIHOLE_PASSWORD
       FULL_SYNC: 'false'
       SYNC_CONFIG_DNS: 'true'
       CRON: '*/5 * * * *'
