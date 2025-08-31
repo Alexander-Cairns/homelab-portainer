@@ -1,7 +1,7 @@
 services:
   pihole:
     container_name: pihole
-    image: pihole/pihole:2024.07.0@sha256:0def896a596e8d45780b6359dbf82fc8c75ef05b97e095452e67a0a4ccc95377
+    image: pihole/pihole:2025.08.0@sha256:90a1412b3d3037d1c22131402bde19180d898255b584d685c84d943cf9c14821
     labels:
       - traefik.http.routers.pihole.rule=Host(`pihole.spaceduck.cloud`)
       - traefik.http.services.pihole.loadbalancer.server.port=80
@@ -20,25 +20,37 @@ services:
     networks:
       - pihole
       - traefik
-  orbital-sync:
-    image: mattwebbio/orbital-sync:1.8.4@sha256:39ade356bf46018b262da9aab9775f3b5fc6f850a4ac6002b699d9fd0b35c240
+  # orbital-sync:
+  #   image: mattwebbio/orbital-sync:1.8.4@sha256:39ade356bf46018b262da9aab9775f3b5fc6f850a4ac6002b699d9fd0b35c240
+  #   environment:
+  #     PRIMARY_HOST_BASE_URL: http://pihole
+  #     PRIMARY_HOST_PASSWORD: $SINNOH_PIHOLE_PASSWORD
+  #     SECONDARY_HOSTS_1_BASE_URL: http://192.168.3.4:20720
+  #     SECONDARY_HOSTS_1_PASSWORD: $JOHTO_PIHOLE_PASSWORD
+  #     INTERVAL_MINUTES: 5
+  #     VERBOSE: 'false'
+  #     SYNC_V5_WHITELIST: false
+  #     SYNC_V5_REGEX_WHITELIST: false
+  #     SYNC_V5_BLACKLIST: false
+  #     SYNC_V5_REGEX_LIST: false
+  #     SYNC_V5_AD_LIST: false
+  #     SYNC_V5_CLIENT: false
+  #     SYNC_V5_GROUP: false
+  #     SYNC_V5_AUDIT_LOG: false
+  #     SYNC_V5_STATIC_DHCP_LEASES: false
+  #     SYNC_V5_FLUSH_TABLES: false
+  #   networks:
+  #     - pihole
+
+  nebula-sync:
+    image: ghcr.io/lovelaze/nebula-sync:latest
+    container_name: nebula-sync
     environment:
-      PRIMARY_HOST_BASE_URL: http://pihole
-      PRIMARY_HOST_PASSWORD: $SINNOH_PIHOLE_PASSWORD
-      SECONDARY_HOSTS_1_BASE_URL: http://192.168.3.4:20720
-      SECONDARY_HOSTS_1_PASSWORD: $JOHTO_PIHOLE_PASSWORD
-      INTERVAL_MINUTES: 5
-      VERBOSE: 'false'
-      SYNC_V5_WHITELIST: false
-      SYNC_V5_REGEX_WHITELIST: false
-      SYNC_V5_BLACKLIST: false
-      SYNC_V5_REGEX_LIST: false
-      SYNC_V5_AD_LIST: false
-      SYNC_V5_CLIENT: false
-      SYNC_V5_GROUP: false
-      SYNC_V5_AUDIT_LOG: false
-      SYNC_V5_STATIC_DHCP_LEASES: false
-      SYNC_V5_FLUSH_TABLES: false
+    PRIMARY: http://pihole|$SINNOH_PIHOLE_PASSWORD
+    REPLICAS: http://192.3.4:20720|$JOHTO_PIHOLE_PASSWORD
+    FULL_SYNC: 'false'
+    SYNC_CONFIG_DNS: 'true'
+    CRON: '*/5 * * * *'
     networks:
       - pihole
 networks:
@@ -49,4 +61,3 @@ networks:
 volumes:
   pihole:
   dnsmasq:
-
