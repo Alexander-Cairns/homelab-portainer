@@ -55,6 +55,7 @@ services:
       CRON: '*/5 * * * *'
     networks:
       - pihole
+    restart: unless-stopped
 networks:
   traefik:
     name: traefik_default
