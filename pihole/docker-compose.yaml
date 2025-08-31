@@ -48,8 +48,8 @@ services:
     depends_on:
       - pihole
     environment:
-      PRIMARY: http://pihole|$JOHTO_PIHOLE_PASSWORD
-      REPLICAS: http://192.168.3.4:20720|$SINNOH_PIHOLE_PASSWORD
+      PRIMARY: http://pihole|$SINNOH_PIHOLE_PASSWORD
+      REPLICAS: http://192.168.3.4:20720|$JOHTO_PIHOLE_PASSWORD
       FULL_SYNC: 'false'
       SYNC_CONFIG_DNS: 'true'
       CRON: '*/5 * * * *'
