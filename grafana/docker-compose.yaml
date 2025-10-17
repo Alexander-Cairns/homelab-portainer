@@ -33,7 +33,7 @@ services:
       - grafana
 
   prometheus:
-    image: prom/prometheus:v3.7.0
+    image: prom/prometheus:v3.7.1
     command:
       - --web.enable-remote-write-receiver
       - --config.file=/etc/prometheus/prometheus.yml
