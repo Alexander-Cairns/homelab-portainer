@@ -13,7 +13,7 @@ services:
     volumes:
       - immich-data:/data
       - /etc/localtime:/etc/localtime:ro
-    env:
+    environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       DP_USERNAME: immich
       DB_DATABASE_NAME: immich
@@ -42,7 +42,7 @@ services:
     #   - 3003:3003
     volumes:
       - model-cache:/cache
-    env:
+    environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       DP_USERNAME: immich
       DB_DATABASE_NAME: immich
