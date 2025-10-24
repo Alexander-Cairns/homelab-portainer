@@ -78,7 +78,7 @@ volumes:
     driver_opts:
       type: "nfs"
       o: "addr=truenas.spaceduck.cloud,nolock,soft,rw"
-      device: ":/docker/example"
+      device: ":/mnt/greatball/global/shared/pictures"
 
 networks:
   traefik:
