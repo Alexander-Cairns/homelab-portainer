@@ -77,7 +77,8 @@ volumes:
   immich-data:
     driver_opts:
       type: "nfs"
-      o: "addr=truenas.spaceduck.cloud,nolock,soft,rw"
+      o: "addr=192.168.1.2,nolock,soft,rw"
+      # o: "addr=truenas.spaceduck.cloud,nolock,soft,rw"
       device: ":/mnt/greatball/global/shared/pictures"
 
 networks:
