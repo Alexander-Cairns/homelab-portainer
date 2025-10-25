@@ -15,7 +15,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
     environment:
       DB_PASSWORD: ${DB_PASSWORD}
-      DP_USERNAME: immich
+      DB_USERNAME: immich
       DB_DATABASE_NAME: immich
     depends_on:
       - redis
@@ -38,8 +38,8 @@ services:
     volumes:
       - model-cache:/cache
     environment:
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      DP_USERNAME: immich
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_USERNAME: immich
       DB_DATABASE_NAME: immich
     restart: always
     healthcheck:
