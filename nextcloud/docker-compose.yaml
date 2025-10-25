@@ -10,10 +10,14 @@ services:
       - MYSQL_PASSWORD=$MYSQL_PASSWORD
       - MYSQL_DATABASE=nextcloud
       - MYSQL_USER=nextcloud
+    networks:
+      - nextcloud
 
   redis:
     image: redis:alpine
     restart: always
+    networks:
+      - nextcloud
 
   app:
     image: nextcloud:fpm
@@ -28,12 +32,16 @@ services:
       - MYSQL_DATABASE=nextcloud
       - MYSQL_USER=nextcloud
       - MYSQL_HOST=db
+    networks:
+      - nextcloud
 
   web:
     image: nginx:alpine-slim
     restart: always
-    ports:
-      - 8080:80
+    labels:
+      - traefik.http.routers.nextcloud.rule=Host(`nextcloud.spaceduck.cloud`)
+      - traefik.http.routers.nextcloud.tls=true
+      - traefik.http.routers.nextcloud.tls.certresolver=letsencryptprod
     depends_on:
       - app
     configs:
@@ -42,6 +50,9 @@ services:
         mode: 0444
     volumes_from:
       - app
+    networks:
+      - nextcloud
+      - traefik
 
 volumes:
   db:
@@ -50,6 +61,12 @@ volumes:
       type: "nfs"
       o: "addr=192.168.1.2,nolock,soft,rw"
       device: ":/mnt/greatball/global/shared/nextcloud"
+
+networks:
+  traefik:
+    name: traefik_default
+    external: true
+  nextcloud:
 
 configs:
   nginx.conf:
