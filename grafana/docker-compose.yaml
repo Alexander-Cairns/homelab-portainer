@@ -37,6 +37,8 @@ services:
     command:
       - --web.enable-remote-write-receiver
       - --config.file=/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
     networks:
       - grafana
 
