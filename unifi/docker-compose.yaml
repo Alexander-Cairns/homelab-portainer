@@ -1,7 +1,7 @@
 version: '3'
 services:
   unifi-network-application:
-    image: lscr.io/linuxserver/unifi-network-application:9.5.21@sha256:e2898e2d998f976d9b8ad4637f8ba5fb978ae44ef5ffd4d565ea1885ea726fcc
+    image: lscr.io/linuxserver/unifi-network-application:10.0.162@sha256:421ef61ced63ccf60a55d0dd4a33f940b97f950a377e1175d60e40b3184cd54f
     container_name: unifi-network-application
     labels:
       - traefik.http.routers.unifi.rule=Host(`unifi.spaceduck.cloud`)
