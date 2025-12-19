@@ -1,7 +1,7 @@
 services:
   immich-server:
     container_name: immich_server
-    image: ghcr.io/immich-app/immich-server:v2.4.0
+    image: ghcr.io/immich-app/immich-server:v2.4.1
     labels:
       - traefik.http.routers.immich.rule=Host(`immich.spaceduck.cloud`)
       - traefik.http.services.immich.loadbalancer.server.port=2283
@@ -29,7 +29,7 @@ services:
 
   immich-machine-learning:
     container_name: immich_machine_learning
-    image: ghcr.io/immich-app/immich-machine-learning:v2.4.0
+    image: ghcr.io/immich-app/immich-machine-learning:v2.4.1
     # extends:
     #   file: hwaccel.ml.yml
     #   service: cpu # set to one of [armnn, cuda, rocm, openvino, openvino-wsl, rknn] for accelerated inference
