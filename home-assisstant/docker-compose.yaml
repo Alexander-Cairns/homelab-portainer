@@ -6,7 +6,7 @@ services:
       - traefik.http.routers.homeassistant.tls=true
       - traefik.http.routers.homeassistant.tls.certresolver=letsencryptprod
     container_name: homeassistant
-    image: "ghcr.io/home-assistant/home-assistant:2026.2.1"
+    image: "ghcr.io/home-assistant/home-assistant:2026.2.3"
     volumes:
       - homeassistant_data:/config
     networks:
