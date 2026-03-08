@@ -1,6 +1,6 @@
 services:
   jellyfin:
-    image: jellyfin/jellyfin:10.10.7
+    image: jellyfin/jellyfin:10.11.0
     labels:
       - traefik.http.routers.jellyfin.rule=Host(`jellyfin.spaceduck.cloud`)
       - traefik.http.services.jellyfin.loadbalancer.server.port=8096
