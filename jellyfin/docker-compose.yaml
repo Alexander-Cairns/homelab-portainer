@@ -20,6 +20,7 @@ services:
       - JELLYFIN_PublishedServerUrl=https://jellyfin.spaceduck.cloud
     networks:
       - traefik
+      - auth
 
 volumes:
   jellyfin-config:
@@ -41,4 +42,7 @@ volumes:
 networks:
   traefik:
     name: traefik_default
+    external: true
+  auth:
+    name: auth_auth
     external: true
