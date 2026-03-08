@@ -25,7 +25,17 @@ services:
 
 volumes:
   jellyfin-config:
+    driver_opts:
+      type: "nfs"
+      o: "addr=192.168.1.2,nolock,soft,rw"
+      # o: "addr=truenas.spaceduck.cloud,nolock,soft,rw"
+      device: ":/mnt/greatball/virtualization/truenas-apps/jellyfin/config"
   jellyfin-cache:
+    driver_opts:
+      type: "nfs"
+      o: "addr=192.168.1.2,nolock,soft,rw"
+      # o: "addr=truenas.spaceduck.cloud,nolock,soft,rw"
+      device: ":/mnt/greatball/virtualization/truenas-apps/jellyfin/cache"
   jellyfin-media:
     driver_opts:
       type: "nfs"
