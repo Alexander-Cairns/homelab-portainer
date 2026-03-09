@@ -78,7 +78,6 @@ services:
       SMTP_USER: "$SMTP_USER"
       X_AUTHELIA_CONFIG_FILTERS: template
       AUDIOBOOKSHELF_CLIENT_ID: "$AUDIOBOOKSHELF_CLIENT_ID"
-      AUDIOBOOKSHELF_CLIENT_SECRET: "$AUDIOBOOKSHELF_CLIENT_SECRET"
     volumes:
       - authelia_data:/data
     configs:
@@ -158,7 +157,7 @@ configs:
           clients:
             - client_id: '{{ env "AUDIOBOOKSHELF_CLIENT_ID" }}'
               client_name: 'audiobookshelf'
-              client_secret: '{{ env "AUDIOBOOKSHELF_CLIENT_SECRET" }}'
+              client_secret: '$$pbkdf2-sha512$$310000$$ITnlXMCAF/6YS5wyBtNsWg$$N9.Zt/270LGrXHIDR3XEM08/cRR5I6e8mKQ1D4GMbET.iczCe0iotxY7kZUoiHi7ZGtgiumBL6fjLM4K/Man2A'
               public: false
               authorization_policy: 'two_factor'
               require_pkce: true
