@@ -77,6 +77,8 @@ services:
       SMTP_PASSWORD: "$SMTP_PASSWORD"
       SMTP_USER: "$SMTP_USER"
       X_AUTHELIA_CONFIG_FILTERS: template
+      AUDIOBOOKSHELF_CLIENT_ID: "$AUDIOBOOKSHELF_CLIENT_ID"
+      AUDIOBOOKSHELF_CLIENT_SECRET: "$AUDIOBOOKSHELF_CLIENT_SECRET"
     volumes:
       - authelia_data:/data
     configs:
