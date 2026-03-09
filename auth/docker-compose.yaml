@@ -154,9 +154,9 @@ configs:
       identity_providers:
         oidc:
           clients:
-            - client_id: '{{ env "AUDIOBOOKSHELF_CLIENT_ID }}'
+            - client_id: '{{ env "AUDIOBOOKSHELF_CLIENT_ID" }}'
               client_name: 'audiobookshelf'
-              client_secret: '{{ env "AUDIOBOOKSHELF_CLIENT_SECRET }}'
+              client_secret: '{{ env "AUDIOBOOKSHELF_CLIENT_SECRET" }}'
               public: false
               authorization_policy: 'two_factor'
               require_pkce: true
