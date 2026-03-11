@@ -170,8 +170,8 @@ configs:
               require_pkce: true
               pkce_challenge_method: 'S256'
               redirect_uris:
-                - 'https://audiobookshelf.doge.irish/auth/openid/callback'
-                - 'https://audiobookshelf.doge.irish/auth/openid/mobile-redirect'
+                - 'https://audiobooks.doge.irish/auth/openid/callback'
+                - 'https://audiobooks.doge.irish/auth/openid/mobile-redirect'
                 - 'audiobookshelf://oauth'
               scopes:
                 - 'openid'
