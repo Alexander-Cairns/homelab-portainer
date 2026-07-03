@@ -24,6 +24,7 @@ services:
     # for hardware acceleration https://jellyfin.org/docs/general/post-install/transcoding/hardware-acceleration/amd
     group_add:
       - 107
+      - 44
     devices:
       - /dev/dri/renderD128:/dev/dri/renderD128
 
