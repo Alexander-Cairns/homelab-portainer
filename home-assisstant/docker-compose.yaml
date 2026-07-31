@@ -14,6 +14,7 @@ services:
       - traefik
     environment:
       - TZ=America/Halifax
+    restart: unless-stopped
 
   zigbee2mqtt:
     labels:
@@ -49,6 +50,7 @@ services:
     configs:
       - source: mosquitto_config
         target: /mosquitto/config/mosquitto.conf
+    restart: unless-stopped
 
 volumes:
   homeassistant_data:
