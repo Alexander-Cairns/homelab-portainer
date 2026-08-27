@@ -14,7 +14,7 @@ services:
       - traefik
     environment:
       - TZ=America/Halifax
-    restart: unless-stopped
+    restart: always
 
   zigbee2mqtt:
     labels:
@@ -24,7 +24,7 @@ services:
       - traefik.http.routers.zigbee2mqtt.tls.certresolver=letsencryptprod
     container_name: zigbee2mqtt
     image: ghcr.io/koenkk/zigbee2mqtt
-    restart: unless-stopped
+    restart: always
     volumes:
       - zigbee2mqtt_data:/app/data
     environment:
@@ -50,7 +50,7 @@ services:
     configs:
       - source: mosquitto_config
         target: /mosquitto/config/mosquitto.conf
-    restart: unless-stopped
+    restart: always
 
 volumes:
   homeassistant_data:

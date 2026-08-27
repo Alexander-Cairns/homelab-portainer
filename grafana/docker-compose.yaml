@@ -2,7 +2,7 @@ services:
   grafana:
     image: grafana/grafana:13.2.0@sha256:3fd54ae1214669f8355f065ec9f6445d5279a3d77095ab048ca045685272429b
     container_name: grafana
-    restart: unless-stopped
+    restart: always
     labels:
       - traefik.http.routers.grafana.rule=Host(`grafana.spaceduck.cloud`)
       - traefik.http.services.grafana.loadbalancer.server.port=3000
@@ -31,7 +31,7 @@ services:
     command: -config.file=/etc/loki/local-config.yaml
     networks:
       - grafana
-    restart: unless-stopped
+    restart: always
 
   prometheus:
     image: prom/prometheus:v3.14.0
@@ -42,7 +42,7 @@ services:
       - "9090:9090"
     networks:
       - grafana
-    restart: unless-stopped
+    restart: always
 
   alloy:
     image: grafana/alloy:v1.18.1@sha256:0f4434c92b3e6cdac38bb129b344e1790c246f7b6e2eaffcc16a5fa363240e33
@@ -70,7 +70,7 @@ services:
         target: /etc/alloy/config.alloy
     networks:
       - grafana
-    restart: unless-stopped
+    restart: always
 
 networks:
   traefik:

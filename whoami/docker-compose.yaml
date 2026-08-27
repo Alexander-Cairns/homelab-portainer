@@ -6,7 +6,7 @@ services:
       - traefik.http.services.whoami.loadbalancer.server.port=80
       - traefik.http.routers.whoami.tls=true
       - traefik.http.routers.whoami.tls.certresolver=letsencryptprod
-    restart: unless-stopped
+    restart: always
     networks:
       - whoami
       - traefik

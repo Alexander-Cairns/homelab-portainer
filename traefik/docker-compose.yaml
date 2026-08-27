@@ -30,7 +30,7 @@ services:
       - traefik_letsencrypt:/letsencrypt
     configs:
       - traefik_config.yaml
-    restart: unless-stopped
+    restart: always
 networks:
   traefik:
   bridge:
