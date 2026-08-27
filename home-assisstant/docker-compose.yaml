@@ -23,7 +23,7 @@ services:
       - traefik.http.routers.zigbee2mqtt.tls=true
       - traefik.http.routers.zigbee2mqtt.tls.certresolver=letsencryptprod
     container_name: zigbee2mqtt
-    image: ghcr.io/koenkk/zigbee2mqtt
+    image: ghcr.io/koenkk/zigbee2mqtt:2.13.0@sha256:4fb4db4d49a217bed6d0204f454ce809febc565bbe051b85c556ee2bcef73d8c
     restart: always
     volumes:
       - zigbee2mqtt_data:/app/data
@@ -41,7 +41,7 @@ services:
       - home
       - traefik
   mosquitto:
-    image: eclipse-mosquitto
+    image: eclipse-mosquitto:2.1-alpine@sha256:6f8d8a947c506f8a2290ec65cd4bd2bc7cb4d43fb5f6271f861cb013e2ef9797
     container_name: mosquitto
     volumes:
       - mosquitto_data:/mosquitto/data
